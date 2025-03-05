@@ -1,0 +1,45 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Test-1",
+      "completed": false,
+      "createdAt": "2025-03-04T23:12:06.606028+11:00",
+      "emoji": "❌",
+      "category": "personal"
+    },
+    {
+      "id": 2,
+      "title": "Test-2",
+      "completed": false,
+      "createdAt": "2025-03-04T23:16:25.0851+11:00",
+      "emoji": "❌",
+      "category": "fitness"
+    },
+    {
+      "id": 3,
+      "title": "Test-3",
+      "completed": false,
+      "createdAt": "2025-03-04T23:19:30.670779+11:00",
+      "emoji": "❌",
+      "category": "work"
+    },
+    {
+      "id": 4,
+      "title": "Test-4",
+      "completed": false,
+      "createdAt": "2025-03-04T23:24:25.884866+11:00",
+      "emoji": "❌",
+      "category": "work"
+    },
+    {
+      "id": 5,
+      "title": "Test-5",
+      "completed": false,
+      "createdAt": "2025-03-04T23:27:49.573643+11:00",
+      "emoji": "❌",
+      "category": "personal"
+    }
+  ],
+  "next_id": 6
+}
