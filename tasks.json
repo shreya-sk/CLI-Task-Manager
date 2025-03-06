@@ -19,9 +19,9 @@
     {
       "id": 3,
       "title": "Test-3",
-      "completed": false,
+      "completed": true,
       "createdAt": "2025-03-04T23:19:30.670779+11:00",
-      "emoji": "❌",
+      "emoji": "✅",
       "category": "work"
     },
     {

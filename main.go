@@ -108,6 +108,10 @@ func main() {
 			}
 
 		case "6":
+			// Statistics
+			taskList.stats()
+
+		case "7":
 			fmt.Println("Exiting...")
 			return
 
@@ -127,7 +131,8 @@ func printMenu() {
 	color.White("3. Complete Task")
 	color.White("4. Delete Task")
 	color.White("5. Search Task")
-	color.White("6. Exit")
+	color.White("6. Completion Stats!")
+	color.White("7. Exit")
 	color.Cyan("-------------------------")
 	color.Yellow("Enter your choice: ")
 }

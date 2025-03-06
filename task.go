@@ -217,3 +217,75 @@ func (l *TaskList) searchTask(test string) bool {
 	return found
 
 }
+
+func (L *TaskList) stats() {
+	color.Cyan("📊 Task List Statistics:")
+	color.Cyan("====================================")
+
+	totalT := len(L.Tasks)
+	created_weekly := 0
+	created_monthly := 0
+	finished_weekly := 0
+	finished_monthly := 0
+	categoryMap := make(map[string]int)
+
+	var completeT int
+	for i := range L.Tasks {
+		categoryMap[L.Tasks[i].Category]++
+		if L.Tasks[i].Completed {
+			completeT++
+			if L.Tasks[i].CreatedAt.After(time.Now().AddDate(0, -1, 0)) {
+				finished_monthly++
+			}
+
+			if L.Tasks[i].CreatedAt.After(time.Now().AddDate(0, 0, -7)) {
+				finished_weekly++
+			}
+		}
+
+		if L.Tasks[i].CreatedAt.After(time.Now().AddDate(0, 0, -7)) {
+			created_weekly++
+		}
+		if L.Tasks[i].CreatedAt.After(time.Now().AddDate(0, -1, 0)) {
+			created_monthly++
+		}
+
+	}
+	fmt.Printf("%s%s\n",
+		color.BlueString("Total Tasks: "),
+		color.WhiteString("%d", totalT))
+	//remainT := totalT - completeT
+	completionRate := float64(completeT) / float64(totalT) * 100
+
+	weeklyRate := 0.0
+	if created_weekly > 0 {
+		weeklyRate = float64(finished_weekly) / float64(created_weekly) * 100
+	}
+
+	monthlyRate := 0.0
+	if created_monthly > 0 {
+		monthlyRate = float64(finished_monthly) / float64(created_monthly) * 100
+	}
+
+	fmt.Printf("%s%s\n",
+		color.BlueString("Completion Rate: "),
+		color.WhiteString("%.1f%%", completionRate))
+
+	fmt.Printf("%s%s\n",
+		color.BlueString("Weekly Completion Rate: "),
+		color.WhiteString("%.1f%% (%d/%d)", weeklyRate, finished_weekly, created_weekly))
+
+	fmt.Printf("%s%s\n",
+		color.BlueString("Monthly Completion Rate: "),
+		color.WhiteString("%.1f%% (%d/%d)", monthlyRate, finished_monthly, created_monthly))
+	fmt.Println("~")
+
+	color.Blue("Tasks by priority:")
+	for category, count := range categoryMap {
+		fmt.Printf("  %s: %s (%s)\n",
+			color.WhiteString(category),
+			color.WhiteString(fmt.Sprintf("%d", count)),
+			color.WhiteString(fmt.Sprintf("%.1f%%", float64(count)/float64(totalT)*100)))
+	}
+	color.Cyan("====================================")
+}
