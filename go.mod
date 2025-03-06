@@ -1,6 +1,6 @@
 module github.com/shreya-sk/go-task-manager
 
-go 1.23.2
+go 1.23
 
 require (
 	github.com/fatih/color v1.18.0 // indirect
