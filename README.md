@@ -3,7 +3,7 @@
 [![Go Version](https://img.shields.io/badge/Go-1.19+-00ADD8?style=flat-square&logo=go)](https://golang.org/doc/go1.19)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
-A powerful, feature-rich command-line task manager built with Go. Efficiently manage your tasks, set priorities, categorize tasks, track completion metrics, and more—all from your terminal.
+Undertaken as a learning project to understand and code in Go. It is a simple command-line task manager, that can be used to efficiently manage your tasks, set priorities, categorize tasks, track completion metrics, and more—all from your terminal.
 
 ## ✨ Features
 
