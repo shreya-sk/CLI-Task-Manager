@@ -17,6 +17,7 @@ type Task struct {
 	CreatedAt time.Time `json:"createdAt"`
 	Emoji     string    `json:"emoji"`
 	Category  string    `json:"category" default:"personal"`
+	Priority  string    `json:"priority" default:"p2"`
 }
 
 type TaskList struct {
@@ -81,7 +82,7 @@ func (l *TaskList) Loadtasks(filename string) error {
 	return nil
 }
 
-func (l *TaskList) addTask(title, category string) {
+func (l *TaskList) addTask(title, category, p string) {
 	task := Task{
 		ID:        l.NextID,
 		Title:     title,
@@ -89,6 +90,7 @@ func (l *TaskList) addTask(title, category string) {
 		CreatedAt: time.Now(),
 		Emoji:     "❌",
 		Category:  category,
+		Priority:  p,
 	}
 	l.Tasks = append(l.Tasks, task)
 	l.NextID++
@@ -122,58 +124,72 @@ func (l *TaskList) listTasks() {
 	}
 
 	// Define column widths
-	idWidth := 6     // Slightly wider for padding
-	titleWidth := 20 // Reduced as requested
-	statusWidth := 12
-	categoryWidth := 15
-	dateWidth := 22
+	idWidth := 4
+	titleWidth := 16
+	statusWidth := 10
+	priorityWidth := 8
+	categoryWidth := 10
+	dateWidth := 18
 
-	// Create divider line
-	divider := fmt.Sprintf("+%s+%s+%s+%s+%s+",
-		strings.Repeat("-", idWidth),
-		strings.Repeat("-", titleWidth),
-		strings.Repeat("-", statusWidth),
-		strings.Repeat("-", categoryWidth),
-		strings.Repeat("-", dateWidth))
+	// Create clean divider line
+	divider := "+-" + strings.Repeat("-", idWidth) +
+		"-+-" + strings.Repeat("-", titleWidth) +
+		"-+-" + strings.Repeat("-", statusWidth) +
+		"-+-" + strings.Repeat("-", priorityWidth) +
+		"-+-" + strings.Repeat("-", categoryWidth) +
+		"-+-" + strings.Repeat("-", dateWidth) + "-+"
 
 	// Print header
-	color.Cyan(divider)
-	color.Cyan("| %-*s | %-*s | %-*s | %-*s | %-*s |\n",
-		idWidth-2, "ID",
-		titleWidth-2, "Title",
-		statusWidth-2, "Status",
-		categoryWidth-2, "Category",
-		dateWidth-2, "Created At")
-	color.Cyan(divider)
+	fmt.Println(divider)
+	fmt.Printf("| %-*s | %-*s | %-*s | %-*s | %-*s | %-*s |\n",
+		idWidth, "ID",
+		titleWidth, "Title",
+		statusWidth, "Status",
+		priorityWidth, "Priority",
+		categoryWidth, "Category",
+		dateWidth, "Created At")
+	fmt.Println(divider)
 
 	// Print each task
 	for _, task := range l.Tasks {
 		// Truncate title if too long
 		title := task.Title
-		if len(title) > titleWidth-2 {
-			title = title[:titleWidth-5] + "..."
+		if len(title) > titleWidth {
+			title = title[:titleWidth-3] + "..."
 		}
 
-		// Format status
-		status := color.YellowString("Pending")
+		// Format status with colors and standard width
+		status := "Pending"
 		if task.Completed {
-			status = color.GreenString("Completed")
+			status = "Completed"
 		}
 
-		// Format date
-		timeFormat := task.CreatedAt.Format("Jan 02, 2006 15:04")
+		// Make sure priority has a value
+		priority := task.Priority
+		if priority == "" {
+			priority = "N/A"
+		}
 
-		// Print row with proper alignment
-		fmt.Printf("| %-*d | %-*s | %-*s | %-*s | %-*s |\n",
-			idWidth-2, task.ID,
-			titleWidth-2, title,
-			statusWidth-2, status,
+		// Format date more compactly
+		timeFormat := task.CreatedAt.Format("Jan 02 15:04")
+
+		// Print status with color in-line
+		fmt.Printf("| %-*d | %-*s | ", idWidth, task.ID, titleWidth, title)
+
+		if task.Completed {
+			color.New(color.FgGreen).Printf("%-*s", statusWidth, status)
+		} else {
+			color.New(color.FgYellow).Printf("%-*s", statusWidth, status)
+		}
+
+		fmt.Printf(" | %-*s | %-*s | %-*s |\n",
+			priorityWidth, priority,
 			categoryWidth, task.Category,
-			dateWidth-2, timeFormat)
+			dateWidth, timeFormat)
 	}
 
 	// Print bottom divider
-	color.Cyan(divider)
+	fmt.Println(divider)
 }
 
 func (l *TaskList) deleteTask(id int) error {
@@ -202,7 +218,7 @@ func (l *TaskList) searchTask(test string) bool {
 	var id []int
 	var categories []string
 	for i := range l.Tasks {
-		if (strings.Contains(l.Tasks[i].Title, test)) || (strings.Contains(l.Tasks[i].Category, test)) {
+		if (strings.Contains(l.Tasks[i].Title, test)) || (strings.Contains(l.Tasks[i].Category, test)) || (strings.Contains(l.Tasks[i].Priority, test)) {
 			subs = append(subs, l.Tasks[i].Title)
 			id = append(id, l.Tasks[i].ID)
 			categories = append(categories, l.Tasks[i].Category)

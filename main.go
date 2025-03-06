@@ -42,7 +42,13 @@ func main() {
 			if category == "" {
 				category = "personal"
 			}
-			taskList.addTask(title, category)
+			fmt.Print("Enter priority (P1/P2/P3) - press enter to skip: ")
+			scanner.Scan()
+			pri := scanner.Text()
+			if pri == "" {
+				pri = "P2"
+			}
+			taskList.addTask(title, category, pri)
 			taskList.saveTasks(filename)
 
 		case "2":
