@@ -17,7 +17,11 @@ A powerful, feature-rich command-line task manager built with Go. Efficiently ma
 
 ## 🖥️ Screenshots
 
-<!-- Add screenshots here -->
+![Screenshot 2025-03-06 at 4 43 11 pm](https://github.com/user-attachments/assets/e1cdd27f-2b47-4d27-a53e-106b59e55651)
+
+![Screenshot 2025-03-06 at 4 43 39 pm](https://github.com/user-attachments/assets/0737b1d0-6363-40e7-ba1b-223d1721a001)
+
+
 
 ## 🚀 Installation
 
