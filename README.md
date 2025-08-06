@@ -1,31 +1,28 @@
-# 📋 Task Manager CLI
+# Task Manager CLI
 
-[![Go Version](https://img.shields.io/badge/Go-1.19+-00ADD8?style=flat-square&logo=go)](https://golang.org/doc/go1.19)
+[![Go Version](https://img.shields.io/badge/Go-1.23+-00ADD8?style=flat-square&logo=go)](https://golang.org/doc/go1.23)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
-Undertaken as a learning project to understand and code in Go. It is a simple command-line task manager, that can be used to efficiently manage your tasks, set priorities, categorize tasks, track completion metrics, and more—all from your terminal.
+A command-line task management application built in Go for learning and productivity.
 
-## ✨ Features
+## Features
 
-- 📝 **Create, read, update, and delete tasks**
-- 🔍 **Search and filter tasks** by title, category, or priority
-- 🌈 **Color-coded interface** for improved readability
-- 📊 **Detailed statistics** on task completion rates and progress
-- 🏷️ **Categorize tasks** for better organization
-- 🔢 **Set priority levels** to focus on what matters most
-- 💾 **Persistent storage** with automatic JSON backup
+- Create, read, update, and delete tasks
+- Search and filter tasks by title, category, or priority
+- Color-coded interface for improved readability
+- Detailed statistics on task completion rates and progress
+- Categorize tasks for better organization
+- Set priority levels to focus on what matters most
+- Persistent storage with automatic JSON backup
 
-## 🖥️ Screenshots
-
-
-## 🚀 Installation
+## Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/go-task-manager.git
+git clone https://github.com/yourusername/CLI-Task-Manager.git
 
 # Navigate to the directory
-cd go-task-manager
+cd CLI-Task-Manager
 
 # Build the project
 go build -o task-manager
@@ -34,81 +31,60 @@ go build -o task-manager
 ./task-manager
 ```
 
-## 📖 Usage
+## Usage
 
-Once running, the application presents a simple menu:
+The application presents a simple menu interface:
 
 ```
 -------------------------
 Task Manager
 -------------------------
 1. Add Task
-2. List Tasks
+2. Show Tasks
 3. Complete Task
 4. Delete Task
-5. Show Statistics
-6. Search Tasks
+5. Search Task
+6. Completion Stats
 7. Exit
 -------------------------
 ```
 
-### Adding a Task
-
-Select option `1` and follow the prompts to enter task details:
-- Task title
-- Category (e.g., personal, work, fitness)
-- Priority (e.g., high, medium, low)
-
 ### Managing Tasks
+- **Add Task**: Enter title, category (personal, work, fitness), and priority (P1/P2/P3)
+- **Show Tasks**: View all tasks in a formatted table with status
+- **Complete/Delete**: Mark tasks as done or remove them by ID
+- **Search**: Find tasks by title, category, or priority
+- **Statistics**: View completion rates and productivity metrics
 
-- **List Tasks (Option 2)**: View all tasks in a neatly formatted table
-- **Complete Task (Option 3)**: Mark a task as completed by entering its ID
-- **Delete Task (Option 4)**: Remove a task by entering its ID
+## Docker Versions
 
-### Statistics & Insights
+This project has multiple branches demonstrating different approaches:
 
-Option `5` provides detailed statistics about your tasks:
-- Overall completion rate
-- Weekly and monthly completion metrics
-- Task distribution by category
-- Productivity trends
+- **main**: Basic Go application
+- **docker-optimization**: Containerized version with Docker optimization techniques
 
-### Search & Filter
+Check the `docker-optimization` branch for advanced Docker implementation including multi-stage builds and volume mounting.
 
-Option `6` allows you to search and filter tasks by:
-- Title keywords
-- Category
-- Priority level
+## Technical Details
 
-## 🔧 Technical Details
+- **Language**: Go 1.23
+- **Dependencies**: fatih/color for terminal colors
+- **Storage**: JSON file-based persistence
+- **Data Structure**: Tasks with ID, title, status, category, priority, and timestamps
 
-The application uses:
-- Go's built-in JSON marshaling/unmarshaling for data persistence
-- Structured error handling for robustness
-- The `fatih/color` package for the colorful UI
-- Efficient data structures for task management
+## Contributing
 
-## 🛠️ Customization
-
-You can easily customize the application by modifying:
-- Categories in the `addTask` function
-- Priority levels in the `addTask` function
-- Colors in the UI by changing the color functions
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
 1. Fork the repository
 2. Create a feature branch: `git checkout -b new-feature`
-3. Commit your changes: `git commit -am 'Add a new feature'`
+3. Commit your changes: `git commit -am 'Add new feature'`
 4. Push the branch: `git push origin new-feature`
 5. Submit a pull request
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
-- The Go team for an amazing programming language
+- The Go team for an excellent programming language
 - [fatih/color](https://github.com/fatih/color) for terminal color capabilities
