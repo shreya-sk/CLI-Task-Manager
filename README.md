@@ -1,114 +1,167 @@
-# 📋 Task Manager CLI
+# CLI Task Manager
 
-[![Go Version](https://img.shields.io/badge/Go-1.19+-00ADD8?style=flat-square&logo=go)](https://golang.org/doc/go1.19)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+A command-line task management application built in Go that demonstrates containerization with Docker and data persistence through volume mounting.
 
-Undertaken as a learning project to understand and code in Go. It is a simple command-line task manager, that can be used to efficiently manage your tasks, set priorities, categorize tasks, track completion metrics, and more—all from your terminal.
+## Features
 
-## ✨ Features
+- Create, read, update, and delete tasks
+- Color-coded terminal interface
+- Task categorization and priority levels
+- Search and filter functionality
+- Completion statistics and progress tracking
+- Persistent JSON storage
 
-- 📝 **Create, read, update, and delete tasks**
-- 🔍 **Search and filter tasks** by title, category, or priority
-- 🌈 **Color-coded interface** for improved readability
-- 📊 **Detailed statistics** on task completion rates and progress
-- 🏷️ **Categorize tasks** for better organization
-- 🔢 **Set priority levels** to focus on what matters most
-- 💾 **Persistent storage** with automatic JSON backup
+## Quick Start
 
-## 🖥️ Screenshots
+### Prerequisites
+- Docker installed on your system
 
+### Running with Docker
 
-## 🚀 Installation
-
+Build the image:
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/go-task-manager.git
-
-# Navigate to the directory
-cd go-task-manager
-
-# Build the project
-go build -o task-manager
-
-# Run the application
-./task-manager
+docker build -t task-manager .
 ```
 
-## 📖 Usage
+Run with persistent storage:
+```bash
+mkdir -p data
+docker run -it -v $(pwd)/data:/app/data task-manager
+```
 
-Once running, the application presents a simple menu:
+Your tasks will be saved to `./data/tasks.json` and persist between container runs.
+
+### Local Development
+
+If you prefer to run without Docker:
+```bash
+go run main.go task.go
+```
+
+## Docker Optimization Journey
+
+This project demonstrates progressive Docker optimization:
+
+| Version | Size | Description |
+|---------|------|-------------|
+| Basic | 1.3GB | Single-stage build with full Go toolchain |
+| Alpine | 18.6MB | Multi-stage build with Alpine Linux base |
+| Scratch | 5.26MB | Ultra-minimal build with scratch base |
+
+**99.6% size reduction** achieved through multi-stage builds.
+
+### Build Variants
+
+Basic Docker build:
+```bash
+docker build -t task-manager:basic -f Dockerfile.basic .
+```
+
+Optimized Alpine build:
+```bash
+docker build -t task-manager:alpine .
+```
+
+Ultra-minimal scratch build:
+```bash
+docker build -t task-manager:scratch -f Dockerfile.scratch .
+```
+
+## Volume Mounting Implementation
+
+### The Challenge
+Initially, volume mounting presented a conflict where the mount would overwrite the container's binary files.
+
+### The Solution
+Discovered that volume mounts replace entire directories, not merge content. Fixed by:
+- Mounting host directory to `/app/data` instead of `/app`
+- Modifying application to save files to `data/tasks.json`
+- Keeping the binary safe at `/app/main`
+
+### Key Learning
+Volume mounting connects host and container file systems, enabling data persistence while maintaining application functionality.
+
+## Usage
+
+The application provides an interactive menu system:
 
 ```
 -------------------------
 Task Manager
 -------------------------
 1. Add Task
-2. List Tasks
+2. Show Tasks
 3. Complete Task
 4. Delete Task
-5. Show Statistics
-6. Search Tasks
+5. Search Task
+6. Completion Stats
 7. Exit
 -------------------------
 ```
 
-### Adding a Task
-
-Select option `1` and follow the prompts to enter task details:
+### Adding Tasks
+When creating tasks, you can specify:
 - Task title
-- Category (e.g., personal, work, fitness)
-- Priority (e.g., high, medium, low)
+- Category (personal, work, fitness, etc.)
+- Priority level (P1, P2, P3)
 
-### Managing Tasks
+### Task Management
+- View tasks in a formatted table with completion status
+- Mark tasks as complete or delete them
+- Search tasks by title, category, or priority
+- View completion statistics and trends
 
-- **List Tasks (Option 2)**: View all tasks in a neatly formatted table
-- **Complete Task (Option 3)**: Mark a task as completed by entering its ID
-- **Delete Task (Option 4)**: Remove a task by entering its ID
+## Technical Implementation
 
-### Statistics & Insights
+### Architecture
+- **Language**: Go 1.23
+- **Dependencies**: fatih/color for terminal colors
+- **Storage**: JSON file-based persistence
+- **Containerization**: Multi-stage Docker builds
 
-Option `5` provides detailed statistics about your tasks:
-- Overall completion rate
-- Weekly and monthly completion metrics
-- Task distribution by category
-- Productivity trends
+### Data Persistence
+Tasks are stored in JSON format with the following structure:
+```json
+{
+  "id": 1,
+  "title": "Example Task",
+  "completed": false,
+  "createdAt": "2025-01-01T10:00:00Z",
+  "category": "work",
+  "priority": "P1"
+}
+```
 
-### Search & Filter
+### Docker Multi-Stage Build
+The optimized Dockerfile uses two stages:
+1. **Builder stage**: Full Go environment for compilation
+2. **Runtime stage**: Minimal base image with only the binary
 
-Option `6` allows you to search and filter tasks by:
-- Title keywords
-- Category
-- Priority level
+This approach reduces image size by 99.6% while maintaining full functionality.
 
-## 🔧 Technical Details
+## Development Notes
 
-The application uses:
-- Go's built-in JSON marshaling/unmarshaling for data persistence
-- Structured error handling for robustness
-- The `fatih/color` package for the colorful UI
-- Efficient data structures for task management
+### Cross-Compilation
+The Docker build includes cross-compilation flags for Linux compatibility:
+```dockerfile
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o main .
+```
 
-## 🛠️ Customization
+### Volume Mount Strategy
+```bash
+# Host directory maps to container data directory
+-v $(pwd)/data:/app/data
+```
 
-You can easily customize the application by modifying:
-- Categories in the `addTask` function
-- Priority levels in the `addTask` function
-- Colors in the UI by changing the color functions
+This ensures data persistence without interfering with the application binary.
 
-## 🤝 Contributing
+## Build Information
 
-Contributions are welcome! Feel free to:
-1. Fork the repository
-2. Create a feature branch: `git checkout -b new-feature`
-3. Commit your changes: `git commit -am 'Add a new feature'`
-4. Push the branch: `git push origin new-feature`
-5. Submit a pull request
+- **Go Version**: 1.23
+- **Base Images**: golang:1.23 (builder), alpine:latest or scratch (runtime)
+- **Final Size**: 5.26MB (scratch), 18.6MB (alpine)
+- **Architecture**: linux/amd64
 
-## 📄 License
+---
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgements
-
-- The Go team for an amazing programming language
-- [fatih/color](https://github.com/fatih/color) for terminal color capabilities
+This project demonstrates fundamental Docker concepts including containerization, optimization techniques, and data persistence patterns commonly used in production environments.
