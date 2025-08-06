@@ -11,7 +11,7 @@ import (
 	"github.com/fatih/color"
 )
 
-const filename = "tasks.json"
+const filename = "data/tasks.json"
 
 func main() {
 	clearScreen()
